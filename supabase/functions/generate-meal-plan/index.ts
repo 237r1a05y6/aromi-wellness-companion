@@ -13,49 +13,44 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const prompt = `Create a comprehensive, structured 7-day meal plan:
+    const prompt = `Create a structured 7-day meal plan:
 - Daily Calorie Target: ${body.calorie_target} kcal
 - Diet Preference: ${body.diet_preference}
 - Allergies: ${body.allergies || 'None'}
 - Cuisine Preference: ${body.cuisine_preference}
 
-FORMAT REQUIREMENTS — Follow this structure precisely for each day:
+FORMAT RULES — NEVER use markdown tables. Use bullet points for ALL data.
 
-## 📅 Day X — [Theme] (e.g., Mediterranean Monday)
+For each day:
+
+## 📅 Day X — [Theme]
 
 ### ⏰ Daily Schedule
-| Time | Meal | Calories | Prep Time | Cook Time |
-|---|---|---|---|---|
-| 7:00 AM | Breakfast | 450 kcal | 10 min | 15 min |
-| 10:00 AM | Morning Snack | 150 kcal | 5 min | — |
-| 1:00 PM | Lunch | 550 kcal | 15 min | 20 min |
-| 4:00 PM | Afternoon Snack | 150 kcal | 5 min | — |
-| 7:00 PM | Dinner | 500 kcal | 15 min | 25 min |
-| 9:00 PM | Evening Snack (optional) | 100 kcal | 5 min | — |
+- **7:00 AM** — Breakfast, ~450 kcal, Prep: 10 min, Cook: 15 min
+- **10:00 AM** — Morning Snack, ~150 kcal, Prep: 5 min
+- **1:00 PM** — Lunch, ~550 kcal, Prep: 15 min, Cook: 20 min
+- **4:00 PM** — Afternoon Snack, ~150 kcal, Prep: 5 min
+- **7:00 PM** — Dinner, ~500 kcal, Prep: 15 min, Cook: 25 min
 
-💧 **Hydration**: Drink 250ml water between each meal
+💧 **Hydration**: 250ml water between each meal
 
 ### 🍳 Breakfast — [Meal Name] (7:00 AM)
-**Ingredients:** List with quantities
-**Instructions:** Step-by-step (keep concise)
-**Macros:**
-| Calories | Protein | Carbs | Fat | Fiber |
-|---|---|---|---|---|
-| 450 kcal | 25g | 50g | 15g | 8g |
+- **Ingredients:** list with quantities
+- **Instructions:** concise steps
+- **Macros:** 450 kcal, Protein: 25g, Carbs: 50g, Fat: 15g, Fiber: 8g
 
 (Repeat for each meal)
 
 ### 📊 Daily Totals
-| Calories | Protein | Carbs | Fat | Fiber | Water |
-|---|---|---|---|---|---|
-| ${body.calorie_target} kcal | Xg | Xg | Xg | Xg | 2.5L |
+- **Calories:** ${body.calorie_target} kcal
+- **Protein / Carbs / Fat / Fiber:** Xg each
+- **Water:** 2.5L
 
 ---
 
-At the end, include:
+At the end:
 
 ## 🛒 Weekly Grocery List
-Organized by category:
 - **Proteins:** ...
 - **Vegetables:** ...
 - **Fruits:** ...
@@ -69,10 +64,8 @@ Organized by category:
 - Quick substitutions
 
 ## 📊 Weekly Macro Summary
-| Day | Calories | Protein | Carbs | Fat |
-|---|---|---|---|---|
-| Day 1 | ... | ... | ... | ... |
-...`;
+- **Day 1** — Calories: X, Protein: Xg, Carbs: Xg, Fat: Xg
+- (repeat for each day)`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
