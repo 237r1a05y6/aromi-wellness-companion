@@ -1,1 +1,16 @@
 project_id = "ftvrwgciiglphwgeeoax"
+
+[functions.ai-coach]
+verify_jwt = false
+
+[functions.health-assessment]
+verify_jwt = false
+
+[functions.generate-workout]
+verify_jwt = false
+
+[functions.generate-meal-plan]
+verify_jwt = false
+
+[functions.analyze-food]
+verify_jwt = false
