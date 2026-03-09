@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { UtensilsCrossed, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { ContentActions } from '@/components/ContentActions';
 
 export default function MealPlanner() {
   const { user } = useAuthStore();
@@ -22,6 +23,7 @@ export default function MealPlanner() {
   });
 
   const update = (key: string, val: string) => setForm({ ...form, [key]: val });
+  const getPlanText = () => typeof plan === 'string' ? plan : plan?.plan || JSON.stringify(plan);
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +57,7 @@ export default function MealPlanner() {
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold font-['Space_Grotesk']">AI Meal Planner</h1>
-        <p className="text-muted-foreground mt-1">Generate a personalized 7-day meal plan</p>
+        <p className="text-muted-foreground mt-1">Generate a personalized 7-day meal plan with timings & macros</p>
       </div>
 
       {!plan && (
@@ -109,13 +111,16 @@ export default function MealPlanner() {
 
       {plan && (
         <div className="space-y-4">
+          <div className="flex justify-end">
+            <ContentActions content={getPlanText()} emailSubject="My AroMi 7-Day Meal Plan" printTargetId="meal-plan-content" />
+          </div>
           <Card>
             <CardHeader><CardTitle>Your 7-Day Meal Plan</CardTitle></CardHeader>
-            <CardContent className="prose prose-sm max-w-none dark:prose-invert">
-              <ReactMarkdown>{typeof plan === 'string' ? plan : plan.plan || JSON.stringify(plan)}</ReactMarkdown>
+            <CardContent id="meal-plan-content" className="prose prose-sm max-w-none dark:prose-invert">
+              <ReactMarkdown>{getPlanText()}</ReactMarkdown>
             </CardContent>
           </Card>
-          <Button variant="outline" onClick={() => setPlan(null)} className="w-full">Generate New Plan</Button>
+          <Button variant="outline" onClick={() => setPlan(null)} className="w-full no-print">Generate New Plan</Button>
         </div>
       )}
     </div>

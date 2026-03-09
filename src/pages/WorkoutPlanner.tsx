@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { Dumbbell, Loader2, Clock, MapPin } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { ContentActions } from '@/components/ContentActions';
 
 export default function WorkoutPlanner() {
   const { user } = useAuthStore();
@@ -22,6 +23,7 @@ export default function WorkoutPlanner() {
   });
 
   const update = (key: string, val: string) => setForm({ ...form, [key]: val });
+  const getPlanText = () => typeof plan === 'string' ? plan : plan?.plan || JSON.stringify(plan);
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +57,7 @@ export default function WorkoutPlanner() {
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold font-['Space_Grotesk']">AI Workout Planner</h1>
-        <p className="text-muted-foreground mt-1">Generate a personalized 7-day workout plan</p>
+        <p className="text-muted-foreground mt-1">Generate a personalized 7-day workout plan with structured timings</p>
       </div>
 
       {!plan && (
@@ -113,17 +115,20 @@ export default function WorkoutPlanner() {
 
       {plan && (
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <MapPin className="h-4 w-4" /> {form.workout_location}
-            <Clock className="h-4 w-4 ml-2" /> {form.daily_time} min/day
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <MapPin className="h-4 w-4" /> {form.workout_location}
+              <Clock className="h-4 w-4 ml-2" /> {form.daily_time} min/day
+            </div>
+            <ContentActions content={getPlanText()} emailSubject="My AroMi 7-Day Workout Plan" printTargetId="workout-plan-content" />
           </div>
           <Card>
             <CardHeader><CardTitle>Your 7-Day Workout Plan</CardTitle></CardHeader>
-            <CardContent className="prose prose-sm max-w-none dark:prose-invert">
-              <ReactMarkdown>{typeof plan === 'string' ? plan : plan.plan || JSON.stringify(plan)}</ReactMarkdown>
+            <CardContent id="workout-plan-content" className="prose prose-sm max-w-none dark:prose-invert">
+              <ReactMarkdown>{getPlanText()}</ReactMarkdown>
             </CardContent>
           </Card>
-          <Button variant="outline" onClick={() => setPlan(null)} className="w-full">Generate New Plan</Button>
+          <Button variant="outline" onClick={() => setPlan(null)} className="w-full no-print">Generate New Plan</Button>
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { Heart, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { ContentActions } from '@/components/ContentActions';
 
 export default function HealthAssessment() {
   const { user } = useAuthStore();
@@ -27,6 +28,12 @@ export default function HealthAssessment() {
   });
 
   const update = (key: string, val: string) => setForm({ ...form, [key]: val });
+
+  const getFullContent = () => {
+    if (!result) return '';
+    const suggestions = Array.isArray(result.suggestions) ? result.suggestions.map((s: string, i: number) => `${i + 1}. ${s}`).join('\n') : '';
+    return `# Health Assessment Results\n\n## Wellness Score: ${result.wellness_score}/100\n\n## Analysis\n${result.analysis}\n\n## Suggestions\n${suggestions}`;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +62,6 @@ export default function HealthAssessment() {
         suggestions: data.suggestions,
       });
 
-      // Update profile
       await supabase.from('profiles').update({
         age: parseInt(form.age),
         stress_level: parseInt(form.stress_level),
@@ -77,39 +83,42 @@ export default function HealthAssessment() {
   if (result) {
     return (
       <div className="space-y-6 max-w-2xl mx-auto">
-        <div className="text-center">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <h1 className="text-3xl font-bold font-['Space_Grotesk']">Your Health Assessment</h1>
+          <ContentActions content={getFullContent()} emailSubject="My AroMi Health Assessment" printTargetId="health-assessment-content" />
         </div>
-        <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
-          <CardContent className="py-8 text-center">
-            <div className="h-24 w-24 rounded-full border-4 border-primary flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl font-bold text-primary">{result.wellness_score}</span>
-            </div>
-            <h2 className="text-xl font-semibold font-['Space_Grotesk']">Wellness Score</h2>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader><CardTitle>Analysis</CardTitle></CardHeader>
-          <CardContent className="prose prose-sm max-w-none dark:prose-invert">
-            <ReactMarkdown>{result.analysis}</ReactMarkdown>
-          </CardContent>
-        </Card>
-        {result.suggestions && (
-          <Card>
-            <CardHeader><CardTitle>Suggestions</CardTitle></CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                {(Array.isArray(result.suggestions) ? result.suggestions : []).map((s: string, i: number) => (
-                  <li key={i} className="flex items-start gap-2 text-sm">
-                    <Heart className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                    {s}
-                  </li>
-                ))}
-              </ul>
+        <div id="health-assessment-content">
+          <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
+            <CardContent className="py-8 text-center">
+              <div className="h-24 w-24 rounded-full border-4 border-primary flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl font-bold text-primary">{result.wellness_score}</span>
+              </div>
+              <h2 className="text-xl font-semibold font-['Space_Grotesk']">Wellness Score</h2>
             </CardContent>
           </Card>
-        )}
-        <Button variant="outline" onClick={() => setResult(null)} className="w-full">Take Another Assessment</Button>
+          <Card className="mt-4">
+            <CardHeader><CardTitle>Analysis</CardTitle></CardHeader>
+            <CardContent className="prose prose-sm max-w-none dark:prose-invert">
+              <ReactMarkdown>{result.analysis}</ReactMarkdown>
+            </CardContent>
+          </Card>
+          {result.suggestions && (
+            <Card className="mt-4">
+              <CardHeader><CardTitle>Priority Suggestions</CardTitle></CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {(Array.isArray(result.suggestions) ? result.suggestions : []).map((s: string, i: number) => (
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <Heart className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+        <Button variant="outline" onClick={() => setResult(null)} className="w-full no-print">Take Another Assessment</Button>
       </div>
     );
   }
