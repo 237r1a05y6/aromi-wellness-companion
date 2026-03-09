@@ -13,20 +13,55 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const prompt = `Create a detailed 7-day workout plan with the following parameters:
+    const prompt = `Create a comprehensive, structured 7-day workout plan with the following parameters:
 - Fitness Goal: ${body.fitness_goal}
 - Workout Location: ${body.workout_location}
 - Fitness Level: ${body.fitness_level}
 - Daily Time Available: ${body.daily_time} minutes
 
-For each day, include:
-- Day name and focus area
-- Warmup (5 min)
-- Main exercises with sets, reps, and rest intervals
-- Cooldown
-- Daily fitness tip
+FORMAT REQUIREMENTS — Follow this structure precisely for each day:
 
-Format the response in clean markdown with headers for each day.`;
+## 📅 Day X — [Focus Area] (e.g., Upper Body, Cardio, etc.)
+
+### ⏰ Schedule Overview
+| Time Block | Activity | Duration |
+|---|---|---|
+| 0:00 - 0:05 | Warmup | 5 min |
+| 0:05 - 0:35 | Main Workout | 30 min |
+| 0:35 - 0:40 | Cooldown | 5 min |
+
+### 🔥 Warmup (5 minutes)
+- Exercise 1 — Duration/reps
+- Exercise 2 — Duration/reps
+
+### 💪 Main Workout
+For each exercise provide:
+| Exercise | Sets × Reps | Rest Between Sets | Tempo | Notes |
+|---|---|---|---|---|
+| Exercise Name | 3 × 12 | 60 sec | 2-1-2 | Form tip |
+
+💧 **Water Break** — Hydrate between exercise groups (every 10-15 min)
+
+### 🧘 Cooldown (5 minutes)
+- Stretch 1 — Hold for 30 sec
+- Stretch 2 — Hold for 30 sec
+
+### 💡 Daily Tip
+One actionable tip related to the day's focus.
+
+---
+
+At the end, include:
+## 📊 Weekly Summary
+| Day | Focus | Duration | Intensity |
+|---|---|---|---|
+| Mon | Upper Body | ${body.daily_time} min | Moderate |
+...
+
+## 🎯 Key Reminders
+- Rest day guidance
+- Progressive overload tips
+- Hydration targets`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -37,7 +72,7 @@ Format the response in clean markdown with headers for each day.`;
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: "You are an expert personal trainer. Create detailed, safe, and effective workout plans." },
+          { role: "system", content: "You are an expert personal trainer. Create detailed, safe, and effective workout plans. Always use markdown tables for schedules. Use emojis for section headers. Be precise with timings, rest periods, and tempo." },
           { role: "user", content: prompt },
         ],
       }),

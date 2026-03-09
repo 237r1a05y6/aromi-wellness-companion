@@ -7,6 +7,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { VoiceAssistant } from '@/components/VoiceAssistant';
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -22,12 +23,11 @@ const navItems = [
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { signOut, profile } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const location = useLocation();
 
   return (
     <div className="flex min-h-screen bg-background">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 border-r border-border bg-sidebar">
+      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 border-r border-border bg-sidebar no-print">
         <div className="flex h-16 items-center gap-2 px-6 border-b border-sidebar-border">
           <Bot className="h-7 w-7 text-primary" />
           <span className="text-xl font-bold font-['Space_Grotesk'] text-sidebar-foreground">AroMi AI</span>
@@ -62,7 +62,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-card border-b border-border flex items-center px-4 z-50">
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-card border-b border-border flex items-center px-4 z-50 no-print">
         <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
@@ -74,7 +74,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
-        <div className="lg:hidden fixed inset-0 z-40">
+        <div className="lg:hidden fixed inset-0 z-40 no-print">
           <div className="absolute inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
           <aside className="absolute left-0 top-14 bottom-0 w-64 bg-sidebar border-r border-sidebar-border overflow-y-auto">
             <nav className="px-3 py-4 space-y-1">
@@ -107,7 +107,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Mobile Bottom Nav */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 flex justify-around py-1.5 px-2">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 flex justify-around py-1.5 px-2 no-print">
         {navItems.slice(0, 5).map((item) => (
           <NavLink
             key={item.to}
@@ -132,15 +132,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </main>
 
-      {/* Floating AI Button (mobile) */}
-      {location.pathname !== '/ai-coach' && (
-        <NavLink
-          to="/ai-coach"
-          className="lg:hidden fixed right-4 bottom-20 z-50 h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
-        >
-          <Bot className="h-5 w-5" />
-        </NavLink>
-      )}
+      {/* Floating Voice Assistant */}
+      <VoiceAssistant />
     </div>
   );
 }
