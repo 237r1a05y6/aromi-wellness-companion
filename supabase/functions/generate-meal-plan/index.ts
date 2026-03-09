@@ -13,19 +13,66 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const prompt = `Create a detailed 7-day meal plan:
+    const prompt = `Create a comprehensive, structured 7-day meal plan:
 - Daily Calorie Target: ${body.calorie_target} kcal
 - Diet Preference: ${body.diet_preference}
 - Allergies: ${body.allergies || 'None'}
 - Cuisine Preference: ${body.cuisine_preference}
 
-For each day include:
-- Breakfast, Lunch, Dinner, and 1-2 Snacks
-- Macro breakdown (protein, carbs, fat) per meal
-- Brief recipe instructions
-- Total daily macros
+FORMAT REQUIREMENTS — Follow this structure precisely for each day:
 
-Format in clean markdown with headers for each day.`;
+## 📅 Day X — [Theme] (e.g., Mediterranean Monday)
+
+### ⏰ Daily Schedule
+| Time | Meal | Calories | Prep Time | Cook Time |
+|---|---|---|---|---|
+| 7:00 AM | Breakfast | 450 kcal | 10 min | 15 min |
+| 10:00 AM | Morning Snack | 150 kcal | 5 min | — |
+| 1:00 PM | Lunch | 550 kcal | 15 min | 20 min |
+| 4:00 PM | Afternoon Snack | 150 kcal | 5 min | — |
+| 7:00 PM | Dinner | 500 kcal | 15 min | 25 min |
+| 9:00 PM | Evening Snack (optional) | 100 kcal | 5 min | — |
+
+💧 **Hydration**: Drink 250ml water between each meal
+
+### 🍳 Breakfast — [Meal Name] (7:00 AM)
+**Ingredients:** List with quantities
+**Instructions:** Step-by-step (keep concise)
+**Macros:**
+| Calories | Protein | Carbs | Fat | Fiber |
+|---|---|---|---|---|
+| 450 kcal | 25g | 50g | 15g | 8g |
+
+(Repeat for each meal)
+
+### 📊 Daily Totals
+| Calories | Protein | Carbs | Fat | Fiber | Water |
+|---|---|---|---|---|---|
+| ${body.calorie_target} kcal | Xg | Xg | Xg | Xg | 2.5L |
+
+---
+
+At the end, include:
+
+## 🛒 Weekly Grocery List
+Organized by category:
+- **Proteins:** ...
+- **Vegetables:** ...
+- **Fruits:** ...
+- **Grains & Carbs:** ...
+- **Dairy/Alternatives:** ...
+- **Pantry Staples:** ...
+
+## 🍽️ Meal Prep Tips
+- What to prep on Sunday
+- Storage tips
+- Quick substitutions
+
+## 📊 Weekly Macro Summary
+| Day | Calories | Protein | Carbs | Fat |
+|---|---|---|---|---|
+| Day 1 | ... | ... | ... | ... |
+...`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -36,7 +83,7 @@ Format in clean markdown with headers for each day.`;
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: "You are an expert nutritionist and meal planner. Create detailed, balanced, and delicious meal plans." },
+          { role: "system", content: "You are an expert nutritionist and meal planner. Create detailed, balanced, and delicious meal plans. Always use markdown tables for schedules and macros. Use emojis for section headers. Include specific timings, prep/cook times, and portion sizes." },
           { role: "user", content: prompt },
         ],
       }),
