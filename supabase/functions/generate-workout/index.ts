@@ -13,50 +13,44 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const prompt = `Create a comprehensive, structured 7-day workout plan with the following parameters:
+    const prompt = `Create a structured 7-day workout plan:
 - Fitness Goal: ${body.fitness_goal}
-- Workout Location: ${body.workout_location}
-- Fitness Level: ${body.fitness_level}
-- Daily Time Available: ${body.daily_time} minutes
+- Location: ${body.workout_location}
+- Level: ${body.fitness_level}
+- Daily Time: ${body.daily_time} minutes
 
-FORMAT REQUIREMENTS — Follow this structure precisely for each day:
+FORMAT RULES — NEVER use markdown tables. Use bullet points for ALL data.
 
-## 📅 Day X — [Focus Area] (e.g., Upper Body, Cardio, etc.)
+For each day use this structure:
 
-### ⏰ Schedule Overview
-| Time Block | Activity | Duration |
-|---|---|---|
-| 0:00 - 0:05 | Warmup | 5 min |
-| 0:05 - 0:35 | Main Workout | 30 min |
-| 0:35 - 0:40 | Cooldown | 5 min |
+## 📅 Day X — [Focus Area]
 
-### 🔥 Warmup (5 minutes)
-- Exercise 1 — Duration/reps
-- Exercise 2 — Duration/reps
+### ⏰ Schedule
+- **0:00 - 0:05** — Warmup
+- **0:05 - 0:35** — Main Workout
+- **0:35 - 0:40** — Cooldown
+
+### 🔥 Warmup (5 min)
+- Exercise — duration/reps
 
 ### 💪 Main Workout
-For each exercise provide:
-| Exercise | Sets × Reps | Rest Between Sets | Tempo | Notes |
-|---|---|---|---|---|
-| Exercise Name | 3 × 12 | 60 sec | 2-1-2 | Form tip |
+For each exercise:
+- **Exercise Name** — Sets × Reps, Rest: 60s, Tempo: 2-1-2, Tip: form cue
 
-💧 **Water Break** — Hydrate between exercise groups (every 10-15 min)
+💧 **Water Break** every 10-15 min
 
-### 🧘 Cooldown (5 minutes)
-- Stretch 1 — Hold for 30 sec
-- Stretch 2 — Hold for 30 sec
+### 🧘 Cooldown (5 min)
+- Stretch — Hold 30s
 
 ### 💡 Daily Tip
-One actionable tip related to the day's focus.
+- One actionable tip
 
 ---
 
-At the end, include:
+At the end:
 ## 📊 Weekly Summary
-| Day | Focus | Duration | Intensity |
-|---|---|---|---|
-| Mon | Upper Body | ${body.daily_time} min | Moderate |
-...
+- **Mon** — Upper Body, ${body.daily_time} min, Moderate
+- (repeat for each day)
 
 ## 🎯 Key Reminders
 - Rest day guidance
@@ -72,7 +66,7 @@ At the end, include:
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: "You are an expert personal trainer. Create detailed, safe, and effective workout plans. Always use markdown tables for schedules. Use emojis for section headers. Be precise with timings, rest periods, and tempo." },
+          { role: "system", content: "You are an expert personal trainer. Create detailed, safe, and effective workout plans. NEVER use markdown tables — use bullet points for all data. Use emojis for section headers. Be precise with timings, rest periods, and tempo." },
           { role: "user", content: prompt },
         ],
       }),
