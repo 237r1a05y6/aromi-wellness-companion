@@ -66,7 +66,7 @@ At the end:
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: "You are an expert personal trainer. Create detailed, safe, and effective workout plans. Always use markdown tables for schedules. Use emojis for section headers. Be precise with timings, rest periods, and tempo." },
+          { role: "system", content: "You are an expert personal trainer. Create detailed, safe, and effective workout plans. NEVER use markdown tables — use bullet points for all data. Use emojis for section headers. Be precise with timings, rest periods, and tempo." },
           { role: "user", content: prompt },
         ],
       }),

@@ -33,40 +33,38 @@ Respond using this exact JSON format (no markdown, just JSON):
   "suggestions": ["suggestion 1", "suggestion 2", ...]
 }
 
-The "analysis" field MUST use this markdown structure:
+The "analysis" field MUST use this markdown structure. NEVER use markdown tables — use bullet points only.
 
 ## 📊 Overall Assessment
-Brief overview paragraph.
+Brief 2-3 sentence overview.
 
 ## 🔍 Category Breakdown
 
 ### 😴 Sleep Quality — Score: X/10
-Analysis of sleep patterns and recommendations.
+- Key finding and recommendation (2-3 bullets)
 
 ### 🥗 Nutrition — Score: X/10
-Analysis of diet and nutritional habits.
+- Key finding and recommendation
 
 ### 🏃 Physical Activity — Score: X/10
-Analysis of activity level relative to goals.
+- Key finding and recommendation
 
 ### 🧠 Stress & Mental Health — Score: X/10
-Analysis of stress management.
+- Key finding and recommendation
 
 ### 💧 Hydration — Score: X/10
-Analysis of water intake.
+- Key finding and recommendation
 
 ### ❤️ Vital Signs — Status: [Normal/Attention Needed]
-BP and diabetes analysis.
+- BP and diabetes analysis
 
 ## 📈 Improvement Timeline
-| Week | Focus Area | Target | Expected Improvement |
-|---|---|---|---|
-| Week 1 | ... | ... | ... |
-| Week 2 | ... | ... | ... |
-| Week 3 | ... | ... | ... |
-| Week 4 | ... | ... | ... |
+- **Week 1** — Focus: X, Target: Y, Expected: Z
+- **Week 2** — Focus: X, Target: Y, Expected: Z
+- **Week 3** — Focus: X, Target: Y, Expected: Z
+- **Week 4** — Focus: X, Target: Y, Expected: Z
 
-The "suggestions" array should contain 5-7 specific, prioritized action items ranked by health impact (highest first). Each suggestion should start with a priority tag like [HIGH], [MEDIUM], or [LOW].`;
+The "suggestions" array should contain 5-7 specific, prioritized action items ranked by health impact. Each suggestion starts with [HIGH], [MEDIUM], or [LOW].`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

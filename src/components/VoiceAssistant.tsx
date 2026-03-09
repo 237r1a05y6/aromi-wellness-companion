@@ -54,8 +54,8 @@ export function VoiceAssistant() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({
-          messages: [{ role: 'user', content: text }],
+         body: JSON.stringify({
+          messages: [{ role: 'user', content: text + '\n\nIMPORTANT: Keep your response very short and concise — max 3-4 bullet points, under 80 words total. No tables.' }],
           profile: profile ? {
             name: profile.name, age: profile.age, fitness_level: profile.fitness_level,
             health_goal: profile.health_goal, diet_preference: profile.diet_preference,

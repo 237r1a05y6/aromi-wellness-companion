@@ -76,7 +76,7 @@ At the end:
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: "You are an expert nutritionist and meal planner. Create detailed, balanced, and delicious meal plans. Always use markdown tables for schedules and macros. Use emojis for section headers. Include specific timings, prep/cook times, and portion sizes." },
+          { role: "system", content: "You are an expert nutritionist and meal planner. Create detailed, balanced, and delicious meal plans. NEVER use markdown tables — use bullet points for all data. Use emojis for section headers. Include specific timings, prep/cook times, and portion sizes." },
           { role: "user", content: prompt },
         ],
       }),
