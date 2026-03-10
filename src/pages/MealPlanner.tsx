@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { UtensilsCrossed, Loader2 } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
 import ReactMarkdown from 'react-markdown';
 import { ContentActions } from '@/components/ContentActions';
 
@@ -20,6 +21,7 @@ export default function MealPlanner() {
     diet_preference: 'balanced',
     allergies: '',
     cuisine_preference: 'any',
+    plan_days: '7',
   });
 
   const update = (key: string, val: string) => setForm({ ...form, [key]: val });
@@ -57,7 +59,7 @@ export default function MealPlanner() {
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold font-['Space_Grotesk']">AI Meal Planner</h1>
-        <p className="text-muted-foreground mt-1">Generate a personalized 7-day meal plan with timings & macros</p>
+        <p className="text-muted-foreground mt-1">Generate a personalized meal plan with timings & macros</p>
       </div>
 
       {!plan && (
@@ -101,8 +103,12 @@ export default function MealPlanner() {
                   </Select>
                 </div>
               </div>
+              <div className="space-y-2">
+                <Label>Plan Duration: {form.plan_days} day{Number(form.plan_days) !== 1 ? 's' : ''}</Label>
+                <Slider value={[Number(form.plan_days)]} onValueChange={(v) => update('plan_days', String(v[0]))} min={1} max={30} step={1} />
+              </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Generating...</> : <><UtensilsCrossed className="h-4 w-4 mr-2" />Generate 7-Day Meal Plan</>}
+                {loading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Generating...</> : <><UtensilsCrossed className="h-4 w-4 mr-2" />Generate {form.plan_days}-Day Meal Plan</>}
               </Button>
             </form>
           </CardContent>
@@ -115,7 +121,7 @@ export default function MealPlanner() {
             <ContentActions content={getPlanText()} emailSubject="My AroMi 7-Day Meal Plan" printTargetId="meal-plan-content" />
           </div>
           <Card>
-            <CardHeader><CardTitle>Your 7-Day Meal Plan</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Your {form.plan_days}-Day Meal Plan</CardTitle></CardHeader>
             <CardContent id="meal-plan-content" className="prose prose-sm max-w-none dark:prose-invert">
               <ReactMarkdown>{getPlanText()}</ReactMarkdown>
             </CardContent>
