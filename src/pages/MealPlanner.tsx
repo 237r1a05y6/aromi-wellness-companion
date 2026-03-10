@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { UtensilsCrossed, Loader2 } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
 import ReactMarkdown from 'react-markdown';
 import { ContentActions } from '@/components/ContentActions';
 
