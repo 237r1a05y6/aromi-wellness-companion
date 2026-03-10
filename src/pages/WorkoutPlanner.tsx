@@ -106,6 +106,10 @@ export default function WorkoutPlanner() {
                   <Input type="number" value={form.daily_time} onChange={(e) => update('daily_time', e.target.value)} min="15" max="120" required />
                 </div>
               </div>
+              <div className="space-y-2">
+                <Label>Plan Duration: {form.plan_days} day{Number(form.plan_days) !== 1 ? 's' : ''}</Label>
+                <Slider value={[Number(form.plan_days)]} onValueChange={(v) => update('plan_days', String(v[0]))} min={1} max={30} step={1} />
+              </div>
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Generating...</> : <><Dumbbell className="h-4 w-4 mr-2" />Generate 7-Day Plan</>}
               </Button>
