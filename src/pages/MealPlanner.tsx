@@ -20,6 +20,7 @@ export default function MealPlanner() {
     diet_preference: 'balanced',
     allergies: '',
     cuisine_preference: 'any',
+    plan_days: '7',
   });
 
   const update = (key: string, val: string) => setForm({ ...form, [key]: val });

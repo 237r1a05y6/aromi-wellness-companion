@@ -20,6 +20,7 @@ export default function WorkoutPlanner() {
     workout_location: 'gym',
     fitness_level: 'intermediate',
     daily_time: '45',
+    plan_days: '7',
   });
 
   const update = (key: string, val: string) => setForm({ ...form, [key]: val });
