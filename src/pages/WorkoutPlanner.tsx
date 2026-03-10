@@ -129,7 +129,7 @@ export default function WorkoutPlanner() {
             <ContentActions content={getPlanText()} emailSubject="My AroMi 7-Day Workout Plan" printTargetId="workout-plan-content" />
           </div>
           <Card>
-            <CardHeader><CardTitle>Your 7-Day Workout Plan</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Your {form.plan_days}-Day Workout Plan</CardTitle></CardHeader>
             <CardContent id="workout-plan-content" className="prose prose-sm max-w-none dark:prose-invert">
               <ReactMarkdown>{getPlanText()}</ReactMarkdown>
             </CardContent>
