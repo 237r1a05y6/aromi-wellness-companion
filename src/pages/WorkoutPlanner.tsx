@@ -59,7 +59,7 @@ export default function WorkoutPlanner() {
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold font-['Space_Grotesk']">AI Workout Planner</h1>
-        <p className="text-muted-foreground mt-1">Generate a personalized 7-day workout plan with structured timings</p>
+        <p className="text-muted-foreground mt-1">Generate a personalized workout plan with structured timings</p>
       </div>
 
       {!plan && (

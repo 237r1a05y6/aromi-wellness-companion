@@ -121,7 +121,7 @@ export default function MealPlanner() {
             <ContentActions content={getPlanText()} emailSubject="My AroMi 7-Day Meal Plan" printTargetId="meal-plan-content" />
           </div>
           <Card>
-            <CardHeader><CardTitle>Your 7-Day Meal Plan</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Your {form.plan_days}-Day Meal Plan</CardTitle></CardHeader>
             <CardContent id="meal-plan-content" className="prose prose-sm max-w-none dark:prose-invert">
               <ReactMarkdown>{getPlanText()}</ReactMarkdown>
             </CardContent>
