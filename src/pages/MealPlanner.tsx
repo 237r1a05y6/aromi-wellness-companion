@@ -108,7 +108,7 @@ export default function MealPlanner() {
                 <Slider value={[Number(form.plan_days)]} onValueChange={(v) => update('plan_days', String(v[0]))} min={1} max={30} step={1} />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Generating...</> : <><UtensilsCrossed className="h-4 w-4 mr-2" />Generate 7-Day Meal Plan</>}
+                {loading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Generating...</> : <><UtensilsCrossed className="h-4 w-4 mr-2" />Generate {form.plan_days}-Day Meal Plan</>}
               </Button>
             </form>
           </CardContent>
