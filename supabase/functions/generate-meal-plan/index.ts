@@ -13,7 +13,8 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const prompt = `Create a structured 7-day meal plan:
+    const planDays = body.plan_days || 7;
+    const prompt = `Create a structured ${planDays}-day meal plan:
 - Daily Calorie Target: ${body.calorie_target} kcal
 - Diet Preference: ${body.diet_preference}
 - Allergies: ${body.allergies || 'None'}
