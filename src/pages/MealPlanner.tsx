@@ -59,7 +59,7 @@ export default function MealPlanner() {
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold font-['Space_Grotesk']">AI Meal Planner</h1>
-        <p className="text-muted-foreground mt-1">Generate a personalized 7-day meal plan with timings & macros</p>
+        <p className="text-muted-foreground mt-1">Generate a personalized meal plan with timings & macros</p>
       </div>
 
       {!plan && (
