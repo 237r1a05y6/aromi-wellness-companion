@@ -18,6 +18,7 @@ import AICoach from "./pages/AICoach";
 import Progress from "./pages/Progress";
 import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
+import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/dashboard" element={<ProtectedPage><Dashboard /></ProtectedPage>} />
             <Route path="/health-assessment" element={<ProtectedPage><HealthAssessment /></ProtectedPage>} />
             <Route path="/workout-planner" element={<ProtectedPage><WorkoutPlanner /></ProtectedPage>} />
