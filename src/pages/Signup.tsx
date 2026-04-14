@@ -13,6 +13,7 @@ export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,19 +22,22 @@ export default function Signup() {
       return;
     }
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { name },
-        emailRedirectTo: window.location.origin,
       },
     });
     setLoading(false);
     if (error) {
       toast.error(error.message);
+    } else if (data.session) {
+      toast.success('Account created! Welcome aboard.');
+      navigate('/dashboard');
     } else {
-      toast.success('Check your email to confirm your account!');
+      toast.success('Account created! Please sign in.');
+      navigate('/login');
     }
   };
 
